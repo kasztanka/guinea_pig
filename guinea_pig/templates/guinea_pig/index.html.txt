@@ -1,0 +1,4 @@
+{% extends 'guinea_pig/base.html' %}
+{% block content %}
+<p>Witamy na stronie g³ównej</p>
+{% endblock content %}

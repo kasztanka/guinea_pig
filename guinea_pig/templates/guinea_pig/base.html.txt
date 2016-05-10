@@ -1,0 +1,22 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html lang="pl">
+    <head>
+        <title>Guinea pig site</title>
+        <meta charset="UTF-8">
+        <meta name="author" content="Magda Lipowska i Piotr Miara">
+        <meta content="text/html; chrset=utf-8" http-equiv="Content-Type">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header>
+            <a href="{% url 'guinea_pig:index' %}"><h1>Strona g³ówna</h1></a>
+        </header>
+        <div id="main_container">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <footer>
+        </footer>
+    </body>
+</html>
