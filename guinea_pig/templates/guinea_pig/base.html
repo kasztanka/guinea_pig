@@ -1,8 +1,8 @@
 {% load staticfiles %}
 <!DOCTYPE HTML>
-<html lang="pl">
+<html lang="pl-PL"">
     <head>
-        <title>Guinea pig site</title>
+        <title>Comic Girl & Volley Boy</title>
         <meta charset="UTF-8">
         <meta name="author" content="Magda Lipowska i Piotr Miara">
         <meta content="text/html; chrset=utf-8" http-equiv="Content-Type">
@@ -10,11 +10,11 @@
     </head>
     <body>
         <header>
-            <a href="{% url 'guinea_pig:index' %}"><h1>Strona g³ówna</h1></a>
+            <a href="{% url 'guinea_pig:index' %}"><h1>Homepage</h1></a>
         </header>
         <div id="main_container">
             {% block content %}
-            {% endblock %}
+            {% endblock content %}
         </div>
         <footer>
         </footer>
