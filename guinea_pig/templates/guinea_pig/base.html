@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <!DOCTYPE HTML>
-<html lang="pl-PL"">
+<html lang="pl-PL">
     <head>
         <title>Comic Girl & Volley Boy</title>
         <meta charset="UTF-8">
@@ -12,11 +12,29 @@
         <header>
             <a href="{% url 'guinea_pig:index' %}"><h1>Homepage</h1></a>
         </header>
+        {% if user.is_authenticated %}
+            <p>Hello {{ user.username }}</p>
+            <a href="{% url 'guinea_pig:user_logout' %}">Log out</a>
+        {% else %}
+            <p>Hello</p>
+            {% if not 'new' in request.path and not 'login' in request.path %}
+                <a href="{% url 'guinea_pig:user_register' %}">Register</a>
+                <form action="{% url 'guinea_pig:user_login' %}" method="POST">
+                    {% csrf_token %}
+                    <p><label for="id_password">Password:</label>
+                    <input id="id_password" maxlength="128" name="password" type="text" /></p>
+                    <p><label for="id_username">Username:</label>
+                    <input id="id_username" maxlength="30" name="username" type="text" /></p>
+                    <button type="submit">Sign in</button>
+                </form>
+            {% endif %}
+        {% endif %}
         <div id="main_container">
             {% block content %}
             {% endblock content %}
         </div>
         <footer>
+            <p>&copy; {% now "Y" %} Magda Lipowska and Piotr Miara</p>
         </footer>
     </body>
 </html>

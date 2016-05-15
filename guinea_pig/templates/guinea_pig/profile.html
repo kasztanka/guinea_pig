@@ -1,0 +1,9 @@
+{% extends 'guinea_pig/base.html' %}
+{% block content %}
+    <h1>Profile</h1>
+    <ul>
+        <li>{{ user.username }}</li>
+        <li>{{ user.email }}</li>
+        <li>{{ profile.avatar }}</li>
+    </ul>
+{% endblock content %}
