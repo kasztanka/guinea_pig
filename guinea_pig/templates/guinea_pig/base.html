@@ -2,33 +2,43 @@
 <!DOCTYPE HTML>
 <html lang="pl-PL">
     <head>
-        <title>Comic Girl & Volley Boy</title>
+        <title>Comic Girl &amp; Volley Boy</title>
         <meta charset="UTF-8">
         <meta name="author" content="Magda Lipowska i Piotr Miara">
         <meta content="text/html; chrset=utf-8" http-equiv="Content-Type">
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
     </head>
     <body>
+        <div id="back"></div>
         <header>
-            <a href="{% url 'guinea_pig:index' %}"><h1>Homepage</h1></a>
+            <a href="{% url 'guinea_pig:index' %}"><h1 id="logo">Comic Girl &amp; Volley Boy</h1></a>
+            <div id="user_account">
+                {% if user.is_authenticated %}
+                <p>Hello {{ user.username }}</p>
+                <a href="{% url 'guinea_pig:user_logout' %}">Log out</a>
+                {% else %}
+                <p>Hello</p>
+                    {% if not 'new' in request.path and not 'login' in request.path %}
+                        <a href="{% url 'guinea_pig:user_register' %}">Register</a>
+                        <form action="{% url 'guinea_pig:user_login' %}" method="POST">
+                            {% csrf_token %}
+                            <p><label for="id_password">Password:</label>
+                            <input id="id_password" maxlength="128" name="password" type="text" /></p>
+                            <p><label for="id_username">Username:</label>
+                            <input id="id_username" maxlength="30" name="username" type="text" /></p>
+                            <button type="submit">Sign in</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div id="menu">
+                <ul>
+                    <li><a href="{% url 'guinea_pig:index' %}#about">About</a></li>
+                    <li><a href="{% url 'guinea_pig:index' %}#games">Games</a></li>
+                    <li><a href="{% url 'guinea_pig:index' %}#contact">Contact</a></li>
+                </ul>
+            </div>
         </header>
-        {% if user.is_authenticated %}
-            <p>Hello {{ user.username }}</p>
-            <a href="{% url 'guinea_pig:user_logout' %}">Log out</a>
-        {% else %}
-            <p>Hello</p>
-            {% if not 'new' in request.path and not 'login' in request.path %}
-                <a href="{% url 'guinea_pig:user_register' %}">Register</a>
-                <form action="{% url 'guinea_pig:user_login' %}" method="POST">
-                    {% csrf_token %}
-                    <p><label for="id_password">Password:</label>
-                    <input id="id_password" maxlength="128" name="password" type="text" /></p>
-                    <p><label for="id_username">Username:</label>
-                    <input id="id_username" maxlength="30" name="username" type="text" /></p>
-                    <button type="submit">Sign in</button>
-                </form>
-            {% endif %}
-        {% endif %}
         <div id="main_container">
             {% block content %}
             {% endblock content %}
