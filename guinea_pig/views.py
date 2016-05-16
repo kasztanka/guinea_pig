@@ -29,7 +29,7 @@ def index(request):
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     profile = get_object_or_404(UserProfile, user=user)
-    return render(request, 'guinea_pig/profile.html', {'profile': profile, 'user': user})
+    return render(request, 'guinea_pig/profile.html', {'profile': profile, 'user_obj': user})
 
 def user_register(request):
     if request.method == "POST":
@@ -42,7 +42,8 @@ def user_register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
-            login(request, user)
+            user_obj = authenticate(username=user.username, password=user.password)
+            login(request, user_obj)
             return redirect('guinea_pig:profile', username=user.username)
     else:
         user_form = RegisterUserForm()
