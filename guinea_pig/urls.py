@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^user/profile/(?P<username>\w+)$', views.profile, name='profile'),
     url(r'^user/login/$', views.user_login, name='user_login'),
     url(r'^user/logout/$', views.user_logout, name='user_logout'),
+    url(r'^game/(?P<game_name>\w+)$', views.game, name='game'),
 ]

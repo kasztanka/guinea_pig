@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.template import loader
 
 from .forms import RegisterUserForm, RegisterUserProfileForm, LoginUserForm
-from .models import UserProfile
+from .models import UserProfile, Game
 
 '''
 def function(request):
@@ -52,9 +52,7 @@ def user_login(request):
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-        print(password, username)
         user = authenticate(username=username, password=password)
-        print(user)
         if user:
             login(request, user)
             return redirect('guinea_pig:index')
@@ -70,4 +68,7 @@ def user_logout(request):
     logout(request)
     return redirect('guinea_pig:index')
 
+def game(request, game_name):
+    game_obj = get_object_or_404(Game, name=game_name)
+    return render(request, 'guinea_pig/game.html', {'game': game_obj})
 

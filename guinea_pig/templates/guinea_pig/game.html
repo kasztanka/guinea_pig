@@ -1,0 +1,10 @@
+{% extends 'guinea_pig/base.html' %}
+{% block content %}
+    <h1>Game</h1>
+    <ul>
+        <li><h2>{{ game.name }}</h2></li>
+        <li>{{ game.author }}</li>
+        <li>{{ game.description }}</li>
+        <li>{{ game.source }}</li>
+    </ul>
+{% endblock content %}
