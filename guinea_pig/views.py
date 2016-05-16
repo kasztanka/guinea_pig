@@ -42,6 +42,7 @@ def user_register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            login(request, user)
             return redirect('guinea_pig:profile', username=user.username)
     else:
         user_form = RegisterUserForm()
