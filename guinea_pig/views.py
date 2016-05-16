@@ -22,8 +22,8 @@ def function(request):
 '''
 
 def index(request):
-    header_text = "Welcome to our website!"
-    context = {"header_text": header_text}
+    games = Game.objects.all()
+    context = {'games': games}
     return render(request, "guinea_pig/index.html", context)
 
 def profile(request, username):
@@ -37,12 +37,13 @@ def user_register(request):
         profile_form = RegisterUserProfileForm(data=request.POST)
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
+            unhashed_password = user.password
             user.set_password(user.password)
             user.save()
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
-            user_obj = authenticate(username=user.username, password=user.password)
+            user_obj = authenticate(username=user.username, password=unhashed_password)
             login(request, user_obj)
             return redirect('guinea_pig:profile', username=user.username)
     else:

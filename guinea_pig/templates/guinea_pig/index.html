@@ -1,6 +1,22 @@
 {% extends 'guinea_pig/base.html' %}
+{% load staticfiles %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}" type="text/css">
+{% endblock css %}
 {% block content %}
-<div id="about"><h2>About</h2></div>
-<div id="games"><h2>Games</h2></div>
-<div id="contact"><h2>Contact</h2></div>
+<div id="about">
+    <h2>About</h2>
+    <p>Hello stranger! Once upon a time two young and beautiful students created this awesome website.</p>
+    <img src="{% static 'images/faces.png' %}"/>
+</div>
+<div id="games">
+    <h2>Games</h2>
+    {% for game in games %}
+        <a href="{% url 'guinea_pig:game' game.name %}"><h3>{{ game.name }}</h3></a>
+    {% endfor %}
+</div>
+<div id="contact">
+    <h2>Contact</h2>
+    
+</div>
 {% endblock content %}

@@ -7,6 +7,9 @@
         <meta name="author" content="Magda Lipowska i Piotr Miara">
         <meta content="text/html; chrset=utf-8" http-equiv="Content-Type">
         <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+        <link href='https://fonts.googleapis.com/css?family=Merriweather+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        {% block css %}
+        {% endblock css %}
     </head>
     <body>
         <div id="back"></div>
@@ -17,7 +20,6 @@
                 <p>Hello {{ user.username }}</p>
                 <a href="{% url 'guinea_pig:user_logout' %}">Log out</a>
                 {% else %}
-                <p>Hello</p>
                     {% if not 'new' in request.path and not 'login' in request.path %}
                         <a href="{% url 'guinea_pig:user_register' %}">Register</a>
                         <form action="{% url 'guinea_pig:user_login' %}" method="POST">
