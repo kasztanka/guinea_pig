@@ -8,11 +8,6 @@ class RegisterUserForm(forms.ModelForm):
         model = User
         fields = {'username', 'email', 'password'}
 
-class RegisterUserProfileForm(forms.ModelForm):
-    class Meta:
-        model = UserProfile
-        fields = {'avatar'}
-
 class LoginUserForm(forms.ModelForm):
     class Meta:
         model = User

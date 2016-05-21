@@ -17,10 +17,12 @@ class Game(models.Model):
     def __str__(self):
         return self.name
 
+class Avatar(models.Model):
+    name = models.CharField(max_length=50)
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
-    avatar = models.PositiveIntegerField(default=1,
-            validators=[MinValueValidator(1), MaxValueValidator(20)])
+    avatar = models.ForeignKey(Avatar, default=1, on_delete=models.SET_DEFAULT)
 
 
 class Record(models.Model):

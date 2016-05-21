@@ -1,12 +1,16 @@
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.template import loader
+from os import listdir
 
-from .forms import RegisterUserForm, RegisterUserProfileForm, LoginUserForm
-from .models import UserProfile, Game
+from .forms import RegisterUserForm, LoginUserForm
+from .models import UserProfile, Game, Avatar
+
 
 '''
 def function(request):
@@ -29,27 +33,35 @@ def index(request):
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     profile = get_object_or_404(UserProfile, user=user)
-    return render(request, 'guinea_pig/profile.html', {'profile': profile, 'user_obj': user})
+    return render(request, 'guinea_pig/profile.html', {'profile': profile})
 
 def user_register(request):
     if request.method == "POST":
         user_form = RegisterUserForm(data=request.POST)
-        profile_form = RegisterUserProfileForm(data=request.POST)
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save()
             unhashed_password = user.password
             user.set_password(user.password)
             user.save()
-            profile = profile_form.save(commit=False)
-            profile.user = user
+            profile = UserProfile.objects.create(user=user)
+            avatar_name = request.POST['avatar']
+            avatar = Avatar.objects.get(name=avatar_name)
+            profile.avatar = avatar
             profile.save()
             user_obj = authenticate(username=user.username, password=unhashed_password)
             login(request, user_obj)
             return redirect('guinea_pig:profile', username=user.username)
     else:
+        img_names = listdir('static/images/avatars')
+        for img_name in img_names:
+            try:
+                Avatar.objects.get(name=img_name)
+            except ObjectDoesNotExist:
+                new_img = Avatar.objects.create(name=img_name)
+                new_img.save()
         user_form = RegisterUserForm()
-        profile_form = RegisterUserProfileForm()
-    return render(request, 'guinea_pig/user_register.html', {'user_form': user_form, 'profile_form': profile_form})
+        context = {'user_form': user_form, 'img_names': img_names}
+        return render(request, 'guinea_pig/user_register.html', context)
 
 def user_login(request):
     if request.method == "POST":
@@ -75,3 +87,10 @@ def game(request, game_name):
     game_obj = get_object_or_404(Game, name=game_name)
     return render(request, 'guinea_pig/game.html', {'game': game_obj})
 
+def check_username(request):
+    try:
+        User.objects.get(username=request.GET['username'])
+        return HttpResponse("<p>Username not available. Try another!</p>")
+    except ObjectDoesNotExist:
+        return HttpResponse("")
+        

@@ -1,9 +1,10 @@
 {% extends 'guinea_pig/base.html' %}
+{% load staticfiles %}
 {% block content %}
     <h1>Profile</h1>
     <ul>
-        <li>{{ user_obj.username }}</li>
-        <li>{{ user_obj.email }}</li>
-        <li>{{ profile.avatar }}</li>
+        <li>{{ profile.user.username }}</li>
+        <li>{{ profile.user.email }}</li>
+        <li><img src="{% static 'images/avatars/' %}{{ profile.avatar.name }}"/></li>
     </ul>
 {% endblock content %}

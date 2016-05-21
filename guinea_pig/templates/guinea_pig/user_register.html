@@ -1,10 +1,34 @@
 {% extends 'guinea_pig/base.html' %}
+{% load staticfiles %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/user_register.css' %}" type="text/css">
+{% endblock css %}
+{% block js_scripts %}
+    <script src="{% static 'js/check_username.js' %}"></script>
+{% endblock js_scripts %}
 {% block content %}
     <h1>Registration</h1>
     <form method="POST" id="register_form">
         {% csrf_token %}
         {{ user_form.as_p}}
-        {{ profile_form.as_p}}
+        {% for img_name in img_names %}
+             <img src="{% static 'images/avatars/' %}{{ img_name }}" name="{{ img_name }}" class="avatar"/>
+        {% endfor %}
+        <input type="hidden" name="avatar" value="{{ img_names|first }}" id="id_avatar">
         <button type="submit">Sign up</button>
     </form>
+    <script>
+        var imgs = document.getElementsByClassName("avatar");
+        imgs[0].className += " active";
+
+        for (var i = 0; i < imgs.length; i++) {
+            imgs[i].onclick = function(){
+                old = document.getElementsByClassName("active")[0];
+                old.className = "avatar";
+                this.className += " active";
+                input = document.getElementById("id_avatar");
+                input.value = this.getAttribute("name");
+            };
+        }
+    </script>
 {% endblock content %}
