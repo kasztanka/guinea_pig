@@ -6,7 +6,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.template import loader
-from os import listdir
 
 from .forms import RegisterUserForm, LoginUserForm
 from .models import UserProfile, Game, Avatar
@@ -52,15 +51,9 @@ def user_register(request):
             login(request, user_obj)
             return redirect('guinea_pig:profile', username=user.username)
     else:
-        img_names = listdir('static/images/avatars')
-        for img_name in img_names:
-            try:
-                Avatar.objects.get(name=img_name)
-            except ObjectDoesNotExist:
-                new_img = Avatar.objects.create(name=img_name)
-                new_img.save()
+        avatars = Avatar.objects.all()
         user_form = RegisterUserForm()
-        context = {'user_form': user_form, 'img_names': img_names}
+        context = {'user_form': user_form, 'avatars': avatars}
         return render(request, 'guinea_pig/user_register.html', context)
 
 def user_login(request):

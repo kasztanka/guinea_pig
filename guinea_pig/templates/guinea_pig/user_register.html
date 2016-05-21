@@ -11,8 +11,8 @@
     <form method="POST" id="register_form">
         {% csrf_token %}
         {{ user_form.as_p}}
-        {% for img_name in img_names %}
-             <img src="{% static 'images/avatars/' %}{{ img_name }}" name="{{ img_name }}" class="avatar"/>
+        {% for av in avatars %}
+             <img src="{% static 'images/avatars/' %}{{ av.name }}" name="{{ av.name }}" class="avatar"/>
         {% endfor %}
         <input type="hidden" name="avatar" value="{{ img_names|first }}" id="id_avatar">
         <button type="submit">Sign up</button>
