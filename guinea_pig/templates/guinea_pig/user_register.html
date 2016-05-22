@@ -11,7 +11,8 @@
     <form method="POST" id="register_form">
         {% csrf_token %}
         {{ user_form.as_p}}
-        {% for av in avatars %}
+        {% load shuffle %}
+        {% for av in avatars|shuffle %}
              <img src="{% static 'images/avatars/' %}{{ av.name }}" name="{{ av.name }}" class="avatar"/>
         {% endfor %}
         <input type="hidden" name="avatar" value="{{ img_names|first }}" id="id_avatar">
