@@ -35,7 +35,7 @@ class Record(models.Model):
     score = models.IntegerField(default=0)
     game_date = models.DateTimeField('date of glory')
     def __str__(self):
-        return self.autor.user.username + ": " + self.score
+        return self.author.user.username + ": " + str(self.score)
 
 class Comment(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

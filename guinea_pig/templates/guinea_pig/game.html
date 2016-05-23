@@ -1,5 +1,8 @@
 {% extends 'guinea_pig/base.html' %}
 {% load staticfiles %}
+{% block js_scripts %}
+    <script src="{% static 'js/get_highscores.js' %}"></script>
+{% endblock js_scripts %}
 {% block content %}
     <h2>Game</h2>
     <ul>
@@ -8,6 +11,8 @@
         <li>{{ game.description }}</li>
         <li>{{ game.source }}</li>
     </ul>
+    <div id="highscores">
+    </div>
     {% if user.is_authenticated %}
         <div id="add_comment">
             <form method="POST" id="comment_form">

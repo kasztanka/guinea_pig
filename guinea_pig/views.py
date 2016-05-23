@@ -89,6 +89,14 @@ def game(request, game_name):
     comment_form = CommentForm()
     context = {'game': game_obj, 'comments': comments, 'comment_form': comment_form}
     return render(request,'guinea_pig/game.html', context)
+    
+def get_highscores(request, game_name):
+    game_obj = get_object_or_404(Game, name=game_name)
+    highscores = game_obj.get_top()
+    result = list(map(lambda x:
+        '<p><span>' + str(x.score) + '</span> ' + str(x.author) + '</p>', highscores))
+    result_text = "".join(result)
+    return HttpResponse(result_text)
 
 def check_username(request):
     try:
