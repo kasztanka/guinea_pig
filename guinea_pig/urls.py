@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^game/(?P<game_name>\w+)/$', views.game, name='game'),
     url(r'^user/new/check/$', views.check_username, name='check_username'),
     url(r'^game/(?P<game_name>\w+)/highscores$', views.get_highscores, name='get_highscores'),
+    url(r'^game/(?P<game_name>\w+)/score$', views.send_score, name='send_score'),
 ]

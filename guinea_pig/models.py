@@ -10,7 +10,7 @@ class Game(models.Model):
     pub_date = models.DateTimeField('date')
     author = models.CharField(max_length=50)
     source = models.CharField(max_length=100, default="")
-    def get_top(self, n=10):
+    def get_top(self, n=5):
         assert isinstance(n, int), "number must be integer"
         assert n > 0, "number of top scores should be bigger than 0"
         scores = self.record_set
@@ -31,11 +31,11 @@ class UserProfile(models.Model):
 
 class Record(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    player = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
-    game_date = models.DateTimeField('date of glory')
+    game_date = models.DateTimeField('date of glory', default=timezone.now)
     def __str__(self):
-        return self.author.user.username + ": " + str(self.score)
+        return self.player.user.username + ": " + str(self.score)
 
 class Comment(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

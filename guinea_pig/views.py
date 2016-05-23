@@ -4,11 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
 from .forms import RegisterUserForm, LoginUserForm, CommentForm
-from .models import UserProfile, Game, Avatar, Comment
+from .models import UserProfile, Game, Avatar, Comment, Record
 
 
 '''
@@ -66,7 +66,8 @@ def user_login(request):
             return redirect('guinea_pig:index')
         else:
             form = LoginUserForm(request.POST)
-            return render(request, 'guinea_pig/login.html', {'form': form, 'errors': 'Wrong password or username'})
+            return render(request, 'guinea_pig/login.html',
+                {'form': form, 'errors': 'Wrong password or username'})
     else:
         form = LoginUserForm()
         return render(request, 'guinea_pig/login.html', {'form': form})
@@ -93,10 +94,34 @@ def game(request, game_name):
 def get_highscores(request, game_name):
     game_obj = get_object_or_404(Game, name=game_name)
     highscores = game_obj.get_top()
-    result = list(map(lambda x:
-        '<p><span>' + str(x.score) + '</span> ' + str(x.author) + '</p>', highscores))
+    result = list(map(lambda record:
+        '<p><span>' + str(record.score) + '</span> '
+        + str(record.player) + '</p>', highscores))
     result_text = "".join(result)
     return HttpResponse(result_text)
+
+def send_score(request, game_name):
+    game_obj = get_object_or_404(Game, name=game_name)
+    user_obj = UserProfile.objects.get(user=request.user)
+    try:
+        record = (Record.objects.get(player=user_obj, game=game_obj))
+    except ObjectDoesNotExist:
+        record = Record.objects.create(player=user_obj, game=game_obj)
+    new_score = request.GET['score']
+    data = {}
+    if int(new_score) > record.score:
+        record.score = new_score
+        data['better'] = 1
+    else:
+        data['better'] = 0
+    record.save()
+    highscores = game_obj.get_top()
+    if record in highscores:
+        data['top'] = 1
+    else:
+        data['top'] = 0
+    return JsonResponse(data)
+    
 
 def check_username(request):
     try:
