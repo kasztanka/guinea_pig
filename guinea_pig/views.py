@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.template import loader
 
-from .forms import RegisterUserForm, LoginUserForm
-from .models import UserProfile, Game, Avatar
+from .forms import RegisterUserForm, LoginUserForm, CommentForm
+from .models import UserProfile, Game, Avatar, Comment
 
 
 '''
@@ -78,7 +78,17 @@ def user_logout(request):
 
 def game(request, game_name):
     game_obj = get_object_or_404(Game, name=game_name)
-    return render(request, 'guinea_pig/game.html', {'game': game_obj})
+    if request.method == "POST":
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.game = game_obj
+            comment.author = UserProfile.objects.get(user=request.user)
+            comment = comment.save()
+    comments = Comment.objects.filter(game=game_obj).order_by('-pub_date')
+    comment_form = CommentForm()
+    context = {'game': game_obj, 'comments': comments, 'comment_form': comment_form}
+    return render(request,'guinea_pig/game.html', context)
 
 def check_username(request):
     try:

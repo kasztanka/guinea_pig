@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django import forms
 
-from .models import UserProfile
+from .models import UserProfile, Comment
 
 class RegisterUserForm(forms.ModelForm):
     class Meta:
@@ -13,3 +13,7 @@ class LoginUserForm(forms.ModelForm):
         model = User
         fields = {'username', 'password'}
 
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = {'text'}
