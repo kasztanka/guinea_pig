@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.db import models
 
 
@@ -19,18 +20,27 @@ class Game(models.Model):
 
 class Avatar(models.Model):
     name = models.CharField(max_length=50)
+    def __str__(self):
+        return self.name
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     avatar = models.ForeignKey(Avatar, default=1, on_delete=models.SET_DEFAULT)
-
+    def __str__(self):
+        return self.user.username
 
 class Record(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    # user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     game_date = models.DateTimeField('date of glory')
     def __str__(self):
-        return self.user.username + ": " + self.score
+        return self.autor.user.username + ": " + self.score
 
-# TODO: class Comment(author, date, text, game, id?)
+class Comment(models.Model):
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
+    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    text = models.CharField(max_length=600)
+    pub_date = models.DateTimeField('publication date', default=timezone.now)
+    def __str__(self):
+        return self.game.name + "_" + self.author.user.username + "_" + pub_date
