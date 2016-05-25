@@ -24,14 +24,17 @@
                 <a href="{% url 'guinea_pig:user_logout' %}">Log out</a>
                 {% else %}
                     {% if not 'new' in request.path and not 'login' in request.path %}
-                        <a href="{% url 'guinea_pig:user_register' %}">Register</a>
                         <form action="{% url 'guinea_pig:user_login' %}" method="POST">
                             {% csrf_token %}
                             <p><label for="id_password">Password:</label>
                             <input id="id_password" maxlength="128" name="password" type="text" /></p>
                             <p><label for="id_username">Username:</label>
                             <input id="id_username" maxlength="30" name="username" type="text" /></p>
-                            <button type="submit">Sign in</button>
+                            <button type="submit" class="press_button green">Sign in</button>
+                            <span> or </span>
+                            <a href="{% url 'guinea_pig:user_register' %}">
+                                <button type="button" class="press_button green">Register</button>
+                            </a>
                         </form>
                     {% endif %}
                 {% endif %}
