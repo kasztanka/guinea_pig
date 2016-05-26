@@ -11,12 +11,14 @@
     <form method="POST" id="register_form">
         {% csrf_token %}
         {{ user_form.as_p}}
+        <p>Choose your avatar:</p>
         {% load shuffle %}
         {% for av in avatars|shuffle %}
              <img src="{% static 'images/avatars/' %}{{ av.name }}" name="{{ av.name }}" class="avatar"/>
         {% endfor %}
         <input type="hidden" name="avatar" value="{{ img_names|first }}" id="id_avatar">
-        <button type="submit">Sign up</button>
+        <br />
+        <button type="submit" class="blue press_button">Sign up</button>
     </form>
     <script>
         var imgs = document.getElementsByClassName("avatar");

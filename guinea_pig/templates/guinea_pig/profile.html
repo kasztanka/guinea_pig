@@ -1,10 +1,12 @@
 {% extends 'guinea_pig/base.html' %}
 {% load staticfiles %}
 {% block content %}
-    <h1>Profile</h1>
-    <ul>
-        <li>{{ profile.user.username }}</li>
-        <li>{{ profile.user.email }}</li>
-        <li><img src="{% static 'images/avatars/' %}{{ profile.avatar.name }}"/></li>
-    </ul>
+    <div id="profile_header">
+        <img src="{% static 'images/avatars/' %}{{ profile.avatar.name }}"/>
+        <span><h2>{{ profile.user.username }}</h2></span>
+    </div>
+    <div id="profile_info">
+    <span>Joined {{ profile.user.date_joined|date:"d b Y" }}</span><br />
+    <span>Mail: {{ profile.user.email }}</span>
+    </div>
 {% endblock content %}
