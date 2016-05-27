@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html lang="pl-PL">
     <head>
-        <title>Comic Girl &amp; Volley Boy</title>
+        <title>Orki z Majorki</title>
         <meta charset="UTF-8">
         <meta name="author" content="Magda Lipowska i Piotr Miara">
         <meta content="text/html; chrset=utf-8" http-equiv="Content-Type">
@@ -17,28 +17,32 @@
     <body>
         <div id="back"></div>
         <header>
-            <a href="{% url 'guinea_pig:index' %}"><h1 id="logo">Comic Girl &amp; Volley Boy</h1></a>
-            <div id="user_account">
+            <a href="{% url 'guinea_pig:index' %}"><h1 id="logo">Orki z Majorki</h1></a>
                 {% if user.is_authenticated %}
-                <p>Hello {{ user.username }}</p>
-                <a href="{% url 'guinea_pig:user_logout' %}">Log out</a>
+                    <div id="user_account">
+                        <p>Hello {{ user.username }}!</p>
+                        <a href="{% url 'guinea_pig:user_logout' %}">
+                            <button type="button" class="press_button blue">Log out</button>
+                        </a>
+                    </div>
                 {% else %}
                     {% if not 'new' in request.path and not 'login' in request.path %}
-                        <form action="{% url 'guinea_pig:user_login' %}" method="POST">
-                            {% csrf_token %}
-                            <p><label for="id_password">Password:</label>
-                            <input id="id_password" maxlength="128" name="password" type="text" /></p>
-                            <p><label for="id_username">Username:</label>
-                            <input id="id_username" maxlength="30" name="username" type="text" /></p>
-                            <button type="submit" class="press_button green">Sign in</button>
-                            <span> or </span>
-                            <a href="{% url 'guinea_pig:user_register' %}">
-                                <button type="button" class="press_button green">Register</button>
-                            </a>
-                        </form>
+                        <div id="user_account">
+                            <form action="{% url 'guinea_pig:user_login' %}" method="POST">
+                                {% csrf_token %}
+                                <p><label for="id_username">Username:</label>
+                                <input id="id_username" maxlength="30" name="username" type="text" /></p>
+                                <p><label for="id_password">Password:</label>
+                                <input id="id_password" maxlength="128" name="password" type="text" /></p>
+                                <button type="submit" class="press_button green">Sign in</button>
+                                <span> or </span>
+                                <a href="{% url 'guinea_pig:user_register' %}">
+                                    <button type="button" class="press_button green">Register</button>
+                                </a>
+                            </form>
+                        </div>
                     {% endif %}
                 {% endif %}
-            </div>
             <div id="menu">
                 <ul>
                     <li><a href="{% url 'guinea_pig:index' %}#about">About</a></li>
