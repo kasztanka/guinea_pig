@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{% static 'css/'%}{{ game.name }}.css" type="text/css">
 {% endblock css %}
 {% block js_scripts %}
-    <script>var STATIC_PATH_IMG = "{% static 'games/images/' %}";</script>
+    <script>var STATIC_PATH_IMG = "{% static 'games/' %}";</script>
     <script src="{% static 'js/get_highscores.js' %}"></script>
     <script src="{% static 'js/send_score.js' %}"></script>
     <script src="{% static 'games/' %}{{ game.source }}"></script>
