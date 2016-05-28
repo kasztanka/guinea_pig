@@ -12,24 +12,25 @@
 {% endblock js_scripts %}
 {% block content %}
     <h2 class="game_name">{{ game.name|under_to_space }}</h2>
-    <ul>
-        <li>{{ game.author }}</li>
-        <li>{{ game.description }}</li>
-    </ul>
     <div id="game_container">
     </div>
     <div id="highscores">
     </div>
-    {% if user.is_authenticated %}
-        <div id="add_comment">
-            <form method="POST" id="comment_form">
-                {% csrf_token %}
-                {{ comment_form.as_p }}
-                <button type="submit">Comment</button>
-            </form>
-        </div>
-    {% endif %}
+    <div id="game_info">
+        <p>Author: {{ game.author }}</p>
+        <p>{{game.description }}</p>
+    </div>
     <div id="comments">
+        {% if user.is_authenticated %}
+            <div id="add_comment">
+                <h4>Add a new comment</h4>
+                <form method="POST" id="comment_form">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" class="press_button blue">Comment</button>
+                </form>
+            </div>
+        {% endif %}
         {% for comment in comments %}
             <div class="comment">
                 <img src="{% static 'images/avatars/' %}{{ comment.author.avatar }}" class="small_img"/>

@@ -165,9 +165,32 @@ body {
     text-transform: capitalize;
 }
 
+#game_container {
+    float: left;
+}
+
+#highscores {
+    float: left;
+    padding: 20px 50px;
+    margin-left: 40px;
+    background-color: #fff;
+}
+
+#game_info {
+    clear: both;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#add_comment {
+    padding: 20px;
+    background: #fff;
+}
+
 .comment {
     clear: both;
     padding: 10px;
+    padding-left: 0;
     overflow: hidden;
 }
 

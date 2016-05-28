@@ -94,11 +94,12 @@ def game(request, game_name):
 def get_highscores(request, game_name):
     game_obj = get_object_or_404(Game, name=game_name)
     highscores = game_obj.get_top()
-    result = list(map(lambda record:
-        '<p><span>' + str(record.score) + '</span> '
-        + str(record.player) + '</p>', highscores))
-    result_text = "".join(result)
-    return HttpResponse(result_text)
+    result = "<h2>Highscores</h2>"
+    for i, record in enumerate(highscores):
+        number = '<p>' + str(i + 1) + '. '
+        score = '<span>' + str(record.score) + '</span> '
+        result += number + score + str(record.player) + '</p>'
+    return HttpResponse(result)
 
 def send_score(request, game_name):
     game_obj = get_object_or_404(Game, name=game_name)
