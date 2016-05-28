@@ -61,20 +61,12 @@ h3 {
     color: #EBF40E;
 }
 
-div.button{
-    text-align: center;
-	display: inline-block;
-	color: #666;
-	background-color: #eee;
-	text-transform: uppercase;
-	letter-spacing: 2px;
-	font-size: 12px;
-	padding: 10px 30px;
-	border-radius: 5px;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border: 1px solid rgba(0,0,0,0.3);
-	border-bottom-width: 3px;
+
+.info {
+    color: white;
+    font-size: 25px;
+    float: left;
+    margin-right: 25px;
 }
 
 #playButton {
@@ -87,12 +79,6 @@ div.button{
 
 #playButton:hover {
     opacity: 1;
-}
-
-
-#score, #ready, #lives, #powerUp {
-    border-bottom-width: 1px;
-    font-size: 14px;
 }
 
 #score_after {

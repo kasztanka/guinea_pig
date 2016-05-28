@@ -20,21 +20,21 @@ a+' xmlns="urn:schemas-microsoft.com:vml" class="rvml">')}}}())})(jQuery);
 
 //********************** GHOST MOVES **************************
 
-function makeMove(map, ghosts, pacman, ghostNumber, mazeStart) {
+function makeMove(ghostNumber) {
     var positionX, positionY, lenNeighbours, i, neighbours = [];
-    ghosts[ghostNumber].moves[0] *= (-1);
-    ghosts[ghostNumber].moves[1] *= (-1);
-    positionX = (ghosts[ghostNumber].x - mazeStart) / scale;
-    positionY = (ghosts[ghostNumber].y - mazeStart) / scale;
-    lenNeighbours = findNeighbours(map, neighbours, positionY, positionX, ghosts[ghostNumber].moves);
+    GHOSTS[ghostNumber].moves[0] *= (-1);
+    GHOSTS[ghostNumber].moves[1] *= (-1);
+    positionX = (GHOSTS[ghostNumber].x - MAZE_START_WIDTH) / SCALE;
+    positionY = (GHOSTS[ghostNumber].y - MAZE_START_HEIGHT) / SCALE;
+    lenNeighbours = findNeighbours(neighbours, positionY, positionX, GHOSTS[ghostNumber].moves);
     switch (lenNeighbours) {
         case 0:
             break;
         case 1:
             for (i = 0; i < 2; i++) {
-                if (ghosts[ghostNumber][0] != neighbours[i][0] || ghosts[ghostNumber][1] != neighbours[i][1]) {
-                    ghosts[ghostNumber].moves[0] = neighbours[i][0];
-                    ghosts[ghostNumber].moves[1] = neighbours[i][1];
+                if (GHOSTS[ghostNumber][0] != neighbours[i][0] || GHOSTS[ghostNumber][1] != neighbours[i][1]) {
+                    GHOSTS[ghostNumber].moves[0] = neighbours[i][0];
+                    GHOSTS[ghostNumber].moves[1] = neighbours[i][1];
                     break;
                 }
             }
@@ -44,27 +44,27 @@ function makeMove(map, ghosts, pacman, ghostNumber, mazeStart) {
             target = [];
             minDistance = 1000;
             minIndex = 0;
-            if (ghosts[ghostNumber].mode == 2 && !(ghosts[ghostNumber].hit)) {
+            if (GHOSTS[ghostNumber].mode == 2 && !(GHOSTS[ghostNumber].hit)) {
                 minIndex = Math.floor(Math.random() * lenNeighbours);
             }
             else {
-                if (ghosts[ghostNumber].mode == 2) {
-                    target[0] = (ghosts[ghostNumber].startY - mazeStart) / scale;
-                    target[1] = (ghosts[ghostNumber].startX - mazeStart) / scale;
+                if (GHOSTS[ghostNumber].mode == 2) {
+                    target[0] = (GHOSTS[ghostNumber].startY - MAZE_START_HEIGHT) / SCALE;
+                    target[1] = (GHOSTS[ghostNumber].startX - MAZE_START_WIDTH) / SCALE;
                 }
                 else {
                     switch (ghostNumber) {
                         case 0:
-                            targetRed(pacman, target, ghosts[ghostNumber], mazeStart);
+                            targetRed(target, GHOSTS[ghostNumber]);
                             break;
                         case 1:
-                            targetPink(map, pacman, target, ghosts[ghostNumber], mazeStart);
+                            targetPink(target, GHOSTS[ghostNumber]);
                             break;
                         case 2:
-                            targetBlue(map, pacman, target, ghosts, mazeStart);
+                            targetBlue(target);
                             break;
                         case 3:
-                            targetOrange(map, pacman, target, ghosts[ghostNumber], positionY, positionX, mazeStart);
+                            targetOrange(target, GHOSTS[ghostNumber], positionY, positionX);
                             break;
                     }
                 }
@@ -78,26 +78,26 @@ function makeMove(map, ghosts, pacman, ghostNumber, mazeStart) {
                     }
                 }
             }
-            ghosts[ghostNumber].moves[0] = neighbours[minIndex][0];
-            ghosts[ghostNumber].moves[1] = neighbours[minIndex][1];
+            GHOSTS[ghostNumber].moves[0] = neighbours[minIndex][0];
+            GHOSTS[ghostNumber].moves[1] = neighbours[minIndex][1];
     }
 }
 
 
-function findNeighbours(map, neighbours, y, x, oldMove) {
+function findNeighbours(neighbours, y, x, oldMove) {
     var i, j, lenNeighbours = 0;
     for (i = -1; i <= 1; i++) {
         for (j = -1; j <= 1; j++) {
             if ((!i || !j) && (i || j) && (j != oldMove[0] || i != oldMove[1])) {
-                if (1 <= y + j && map.length - 1> y + j && 0 <= x + i && map[0].length > x + i) {
-                    if (map[y + j][x + i] != 1) {
+                if (1 <= y + j && MAP.length - 1> y + j && 0 <= x + i && MAP[0].length > x + i) {
+                    if (MAP[y + j][x + i] != 1) {
                         neighbours[lenNeighbours] = [];
                         neighbours[lenNeighbours][0] = j;
                         neighbours[lenNeighbours][1] = i;
                         lenNeighbours += 1;
                     }
                 }
-                if (x + i <= -1 || x + i >= map[0].length) {
+                if (x + i <= -1 || x + i >= MAP[0].length) {
                     neighbours[lenNeighbours] = [];
                     neighbours[lenNeighbours][0] = j;
                     neighbours[lenNeighbours][1] = i;
@@ -109,52 +109,52 @@ function findNeighbours(map, neighbours, y, x, oldMove) {
     return lenNeighbours;
 }
 
-function targetRed(pacman, target, ghost, mazeStart) {
+function targetRed(target, ghost) {
     if (ghost.mode) {
         target[0] = 1;
         target[1] = 18;
     }
     else {
-        target[0] = (pacman.y - mazeStart) / scale;
-        target[1] = (pacman.x - mazeStart) / scale;
+        target[0] = (PACMAN.y - MAZE_START_HEIGHT) / SCALE;
+        target[1] = (PACMAN.x - MAZE_START_WIDTH) / SCALE;
     }
 }
 
-function targetPink(map, pacman, target, ghost, mazeStart) {
+function targetPink(target, ghost) {
     if (ghost.mode) {
         target[0] = 1;
         target[1] = 1;
     }
     else {
-        target[0] = (pacman.y - mazeStart) / scale + 4 * !(pacman.mode % 2) * Math.pow((-1), (pacman.mode > 1));
-        target[1] = (pacman.x - mazeStart) / scale + 4 * (pacman.mode % 2) * Math.pow((-1), (pacman.mode > 1));
+        target[0] = (PACMAN.y - MAZE_START_HEIGHT) / SCALE + 4 * !(PACMAN.mode % 2) * Math.pow((-1), (PACMAN.mode > 1));
+        target[1] = (PACMAN.x - MAZE_START_WIDTH) / SCALE + 4 * (PACMAN.mode % 2) * Math.pow((-1), (PACMAN.mode > 1));
     }
 }
 
-function targetBlue(map, pacman, target, ghosts, mazeStart) {
-    if (ghosts[2].mode) {
+function targetBlue(target) {
+    if (GHOSTS[2].mode) {
         target[0] = 20;
         target[1] = 1;
     }
     else {
-        var pacmanY2 = (pacman.y - mazeStart) / scale + 2 * !(pacman.mode % 2) * Math.pow((-1), (pacman.mode > 1));
-        var pacmanX2 = (pacman.x - mazeStart) / scale + 2 * (pacman.mode % 2) * Math.pow((-1), (pacman.mode > 1));
-        var redY = (ghosts[0].y - mazeStart) / scale;
-        var redX = (ghosts[0].x - mazeStart) / scale;
+        var pacmanY2 = (PACMAN.y - MAZE_START_HEIGHT) / SCALE + 2 * !(PACMAN.mode % 2) * Math.pow((-1), (PACMAN.mode > 1));
+        var pacmanX2 = (PACMAN.x - MAZE_START_WIDTH) / SCALE + 2 * (PACMAN.mode % 2) * Math.pow((-1), (PACMAN.mode > 1));
+        var redY = (GHOSTS[0].y - MAZE_START_HEIGHT) / SCALE;
+        var redX = (GHOSTS[0].x - MAZE_START_WIDTH) / SCALE;
         target[0] = pacmanY2 + (pacmanY2 - redY);
         target[1] = pacmanX2 + (pacmanX2 - redX);
     }
 }
 
-function targetOrange(map, pacman, target, ghost, positionY, positionX, mazeStart) {
+function targetOrange(target, ghost, positionY, positionX) {
     if (ghost.mode) {
     target[0] = 20;
     target[1] = 18;
     }
     else {
         var pacmanX, pacmanY, distance;
-        pacmanY = (pacman.y - mazeStart) / scale;
-        pacmanX = (pacman.x - mazeStart) / scale;
+        pacmanY = (PACMAN.y - MAZE_START_HEIGHT) / SCALE;
+        pacmanX = (PACMAN.x - MAZE_START_WIDTH) / SCALE;
         distance = Math.sqrt(Math.pow((positionY - pacmanY), 2) + Math.pow((positionX - pacmanX), 2));
         if (distance >= 6) {
             target[0] = pacmanY;
@@ -171,8 +171,7 @@ function targetOrange(map, pacman, target, ghost, positionY, positionX, mazeStar
 //  **************** MAPS ************************************************************
 
 
-var numberOfMaps = 4;
-var maps = [
+var MAPS = [
     [
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
         [1, 5, 5, 5, 5, 5, 5, 5, 5, 1, 5, 5, 5, 5, 5, 5, 5, 5, 1],
@@ -276,13 +275,13 @@ var maps = [
     [
     ]*/
 ];
-function randomMap(map) {
+function randomMap(MAP) {
     var chosen, i, j;
-    chosen = Math.floor(Math.random() * numberOfMaps);
+    chosen = Math.floor(Math.random() * MAPS.length);
     for (j = 0; j < 21; j++) {
-        map[j] = [];
+        MAP[j] = [];
         for (i = 0; i < 21; i++) {
-            map[j][i] = maps[chosen][j][i];
+            MAP[j][i] = MAPS[chosen][j][i];
         }
     }
 }
@@ -292,23 +291,24 @@ function randomMap(map) {
 //  **************** MAIN ************************************************************
 
 
-var made, moving, play, score, coins, powerUp, lives, ready, timer, timer2, pacman, continueGame, box, firstGame;
-var map = []
-var ghostImages = ["red.png", "pink.png", "blue.png", "yellow.png", "scared.png"];
-var ghosts = [];
-var gameWidth = 700; 
-var gameHeight = 640;
-var scale = 20;
-var mazeWidth = 19;
-var mazeHeight = 21;
-var mazeStart = (gameWidth - mazeHeight * scale) / 2;
+var MADE, MOVING, PLAY, SCORE, TO_COLLECT, POWER_UP, LIVES, READY, TIMER_1, TIMER_2, PACMAN, CONTINUE_GAME, BOX, FIRST_GAME;
+var MAP = []
+var GHOST_IMAGES = ["red.png", "pink.png", "blue.png", "yellow.png", "scared.png"];
+var GHOSTS = [];
+var GAME_WIDTH = 700; 
+var GAME_HEIGHT = 640;
+var SCALE = 20;
+var MAZE_WIDTH = 19;
+var MAZE_HEIGHT = 21;
+var MAZE_START_WIDTH = (GAME_WIDTH - MAZE_WIDTH * SCALE) / 2;
+var MAZE_START_HEIGHT = (GAME_HEIGHT - MAZE_HEIGHT * SCALE) / 2;
 var FPS = 50;
-var key = [false, false, false, false];
-var direction = [false, false, false, false];
-var powerUpTimes = [];
-var powerUpModes = [];
-var modes = [20, 7, 7];
-var killed = 0;
+var KEYS = [false, false, false, false];
+var DIRECTIONS = [false, false, false, false];
+var POWER_UP_TIMES = [];
+var POWER_UP_MODES = [];
+var MODES_TIMES = [20, 7, 7];
+var KILLED = 0;
 
 function createEl(name, className) {
     var newEl = document.createElement(name);
@@ -323,24 +323,24 @@ function clearEl(container) {
 }
 
 function loadMenu() {
-    clearEl(box);
-    box.innerHTML = '<h3>PA<span class="yellow">C</span>MAN</h3><p id="playButton" onclick="loadMap()">Play game</p>';
-    continueGame = false;
-    firstGame = true;
+    clearEl(BOX);
+    BOX.innerHTML = '<h3>PA<span class="yellow">C</span>MAN</h3><p id="playButton" onclick="loadMap()">Play game</p>';
+    CONTINUE_GAME = false;
+    FIRST_GAME = true;
 }
 
 $(function() {
-    box = document.getElementById("game_container");
+    BOX = document.getElementById("game_container");
     loadMenu();
 });
 
-var pacmanImg = createEl("img");
-pacmanImg.id = 'image';
-pacmanImg.src = STATIC_PATH_IMG + "pacman/pacman.png";
-pacmanImg.style.position = "absolute";
-pacmanImg.style.zIndex = 50;
-pacmanImg.style.height = scale + "px";
-pacmanImg.style.width = 'auto';
+var PACMAN_IMG = createEl("img");
+PACMAN_IMG.id = 'image';
+PACMAN_IMG.src = STATIC_PATH_IMG + "pacman/pacman.png";
+PACMAN_IMG.style.position = "absolute";
+PACMAN_IMG.style.zIndex = 50;
+PACMAN_IMG.style.height = SCALE + "px";
+PACMAN_IMG.style.width = 'auto';
 
 function Sprite(img, startX, startY, speed, mode, hit, modeStart) {
     this.img = img;
@@ -355,90 +355,90 @@ function Sprite(img, startX, startY, speed, mode, hit, modeStart) {
     this.modeStart = modeStart;
 }
 
-pacman = new Sprite(pacmanImg, mazeStart + scale * 5, mazeStart + scale * 5, 0.125 * scale, 2);
-pacman.img.style.left = pacman.x + "px";
-pacman.img.style.top = pacman.y + "px";
+PACMAN = new Sprite(PACMAN_IMG, MAZE_START_WIDTH + SCALE * 5, MAZE_START_HEIGHT + SCALE * 5, 0.125 * SCALE, 2);
+PACMAN.img.style.left = PACMAN.x + "px";
+PACMAN.img.style.top = PACMAN.y + "px";
 
 function readyGo() {
-    if (ready == 4) {
-        sign = createEl("div", "button");
+    var infoBox = document.getElementById("info_box");
+    if (READY == 4) {
+        sign = createEl("p", "info");
         sign.id = "ready";
-        sign.style.left =  mazeStart + (mazeWidth + 1) * scale + "px", 
-        sign.style.top = mazeStart - 3 * scale + "px";
         sign.style.position = "absolute";
-        box.appendChild(sign);
+        sign.style.left = MAZE_START_WIDTH + 14.5 * SCALE + "px";
+        infoBox.appendChild(sign);
     }
-    ready -= 1;
+    READY -= 1;
     sign = document.getElementById("ready");
-    if (!ready) {
-        sign.innerHTML = "<p>Ready?</p><p>Go!</p>";
+    if (!READY) {
+        sign.innerHTML = "Ready? Go!";
         setTimeout(function() {
-            box.removeChild(sign);
-            play = true;
+            infoBox.removeChild(sign);
+            PLAY = true;
             }, 1000);
         setTimeout(ghostStart, 1000);
     }
     else {
-        sign.innerHTML = "<p>Ready?</p><p>" + ready.toString() + "</p>";
+        sign.innerHTML = "Ready? " + READY.toString();
         setTimeout(readyGo, 1000);
     }
 }
 
 function ghostStart() {
-    if (ghosts[moving].mode == 2) {
-        powerUpTimes[moving] = (new Date().getTime()) - ghosts[moving].modeStart;
+    if (GHOSTS[MOVING].mode == 2) {
+        POWER_UP_TIMES[MOVING] = (new Date().getTime()) - GHOSTS[MOVING].modeStart;
     }
     else {
-        ghosts[moving].modeStart = new Date().getTime();
+        GHOSTS[MOVING].modeStart = new Date().getTime();
     }
-    moving += 1;
-    if (moving < 4) timer = setTimeout(ghostStart, 4000);
+    MOVING += 1;
+    if (MOVING < 4) TIMER_1 = setTimeout(ghostStart, 4000);
 }
 
 function changeScore() {
     var sign = document.getElementById("score");
-    if (sign) sign.innerHTML = "<p>Score</p><p>" + score.toString() + "</p>";
+    if (sign) sign.innerHTML = "Score: " + SCORE.toString();
 }
 
 function changeLives() {
     var sign = document.getElementById("lives");
     if (sign) {
-        sign.innerHTML = "<p>Lives</p><p>" + lives.toString() + "</p>";
+        sign.innerHTML = "Lives: " + LIVES.toString();
     }
 }
 
 function changePowerUp() {
     var sign;
-    if (powerUp == 8) {
-        sign = createEl("div", "button");
+    infoBox = document.getElementById("info_box");
+    if (POWER_UP == 8) {
+        sign = createEl("p", "info");
         sign.id = "powerUp";
-        sign.style.left =  mazeStart + (mazeWidth + 1) * scale + "px", 
-        sign.style.top = mazeStart + 12 * scale + "px";
         sign.style.position = "absolute";
-        box.appendChild(sign);
+        sign.style.left = MAZE_START_WIDTH + 15.5 * SCALE + "px";
+        infoBox.appendChild(sign);
     }
-    powerUp -= 1;
+    POWER_UP -= 1;
     sign = document.getElementById("powerUp");
     if (sign) {
-        if (!powerUp || killed == 4) {
-            sign.innerHTML = "<p>Power-up</p><p>Watch out!</p>";
-            setTimeout(function() {box.removeChild(sign)}, 1000);
+        if (!POWER_UP || KILLED == 4) {
+            sign.innerHTML = "Watch out!";
+            TIMER_2 = setTimeout(function() {infoBox.removeChild(sign)}, 1000);
         }
         else {
-            sign.innerHTML = "<p>Power-up</p><p>" + powerUp.toString() + "</p>";
-            timer2 = setTimeout(changePowerUp, 1000);
+            sign.innerHTML = "Power-up: " + POWER_UP.toString() + "s";
+            TIMER_2 = setTimeout(changePowerUp, 1000);
         }
     }
 }
 
-function ghostCollision(ghost, pacman) {
-    if (pacman.x == ghost.x) {
-        if ((pacman.y > ghost.y && pacman.y + 5 < ghost.y + scale) || (pacman.y + scale - 5 > ghost.y && pacman.y < ghost.y)) {
+function ghostCollision(ghost) {
+    if (PACMAN.x == ghost.x) {
+        if ((PACMAN.y > ghost.y && PACMAN.y + 5 < ghost.y + SCALE) || (PACMAN.y + SCALE - 5 > ghost.y && PACMAN.y < ghost.y)) {
             return 1;
         }
     }
-    else if (pacman.y == ghost.y) {
-        if ((pacman.x > ghost.x && pacman.x + 5 < ghost.x + scale) || (pacman.x + scale - 5 > ghost.x && pacman.x < ghost.x)) {
+    else if (PACMAN.y == ghost.y) {
+        if ((PACMAN.x > ghost.x && PACMAN.x + 5 < ghost.x + SCALE) || (PACMAN.x + SCALE - 5 > ghost.x && PACMAN.x < ghost.x)) {
             return 1;
         }
     }
@@ -447,88 +447,89 @@ function ghostCollision(ghost, pacman) {
 
 
 function loadMap() {
-    var startButton, table, point, coin;
-    clearEl(box);
-    clearTimeout(timer);
-    if (!continueGame) {
-        score = 0;
-        lives = 3;
+    var table, point, coin, infoBox;
+    clearEl(BOX);
+    clearTimeout(TIMER_1);
+    if (!CONTINUE_GAME) {
+        SCORE = 0;
+        LIVES = 3;
     }
-    play = false;
-    ready = 4;
-    made = 0;
-    moving = 0;
-    coins = 0;
-    falseAllExcept(direction, -1);
-    falseAllExcept(key, -1);
-    startButton = document.getElementById("gameButton");
+    PLAY = false;
+    READY = 4;
+    MADE = 0;
+    MOVING = 0;
+    TO_COLLECT = 0;
+    PACMAN.mode = 0;
+    $("#image").rotate(PACMAN.mode * 90);
+    falseAllExcept(DIRECTIONS, -1);
+    falseAllExcept(KEYS, -1);
     table = createEl("table");
     table.id = 'game';
-    table.style.width = mazeWidth * scale + "px";
-    table.style.left = mazeStart + "px";
-    table.style.top = mazeStart + "px";
-    randomMap(map);
-    for (var i = 0; i < mazeHeight; i++) {
+    table.style.width = MAZE_WIDTH * SCALE + "px";
+    table.style.left = MAZE_START_WIDTH + "px";
+    table.style.top = MAZE_START_HEIGHT + "px";
+    randomMap(MAP);
+    for (var i = 0; i < MAZE_HEIGHT; i++) {
         row = table.appendChild(createEl("tr"));
-        row.style.height = scale + "px";
-        for (var j = 0; j < mazeWidth; j++) {
-            point = map[i][j];
+        row.style.height = SCALE + "px";
+        for (var j = 0; j < MAZE_WIDTH; j++) {
+            point = MAP[i][j];
             switch (point) {
                 case 1:
                     row.appendChild(createEl("td", "wall"));
                     break;
                 case 2:
-                    pacman.startY = pacman.y = i * scale + mazeStart;
-                    pacman.startX = pacman.x = j * scale + mazeStart;
-                    pacman.img.style.top = pacman.y + "px";
-                    pacman.img.style.left = pacman.x + "px";
+                    PACMAN.startY = PACMAN.y = i * SCALE + MAZE_START_HEIGHT;
+                    PACMAN.startX = PACMAN.x = j * SCALE + MAZE_START_WIDTH;
+                    PACMAN.img.style.top = PACMAN.y + "px";
+                    PACMAN.img.style.left = PACMAN.x + "px";
                     row.appendChild(createEl("td"));
                     break;
                 case 4:
-                    if (firstGame) {
+                    if (FIRST_GAME) {
                     img = createEl("img");
                     }
-                    else img = ghosts[made].img;
-                    img.src = STATIC_PATH_IMG + "pacman/" + ghostImages[made];
-                    img.style.left = j * scale + mazeStart + "px";
-                    img.style.top = i * scale + mazeStart + "px";
+                    else img = GHOSTS[MADE].img;
+                    img.src = STATIC_PATH_IMG + "pacman/" + GHOST_IMAGES[MADE];
+                    img.style.left = j * SCALE + MAZE_START_WIDTH + "px";
+                    img.style.top = i * SCALE + MAZE_START_HEIGHT + "px";
                     img.style.position = "absolute";
                     img.style.zIndex = 60;
-                    img.style.height = scale + "px";
+                    img.style.height = SCALE + "px";
                     img.style.width = 'auto';
-                    ghosts[made] = new Sprite(img, j * scale + mazeStart, i * scale + mazeStart, 0.1 * scale, 1, 0);
+                    GHOSTS[MADE] = new Sprite(img, j * SCALE + MAZE_START_WIDTH, i * SCALE + MAZE_START_HEIGHT, 0.1 * SCALE, 1, 0);
                     row.appendChild(createEl("td", "block"));
-                    box.appendChild(img);
-                    made += 1;
+                    BOX.appendChild(img);
+                    MADE += 1;
                     break;
                 case 8: 
                     if (j == 0) {
                         row.appendChild(createEl("td"));
-                        tele1 = createEl("div", "teleport");
-                        tele2 = createEl("div", "teleport");
-                        tele1.style.left = mazeStart - scale + "px"; 
-                        tele2.style.left = mazeStart + scale * mazeWidth + "px";
-                        tele2.style.top = tele1.style.top = mazeStart + i * scale + "px";
-                        tele2.style.height = tele1.style.height = scale + "px";
-                        tele2.style.width = tele1.style.width = scale + "px";
-                        box.appendChild(tele1);
-                        box.appendChild(tele2);
+                        teleport_1 = createEl("div", "teleport");
+                        teleport_2 = createEl("div", "teleport");
+                        teleport_1.style.left = MAZE_START_WIDTH - SCALE + "px"; 
+                        teleport_2.style.left = MAZE_START_WIDTH + SCALE * MAZE_WIDTH + "px";
+                        teleport_2.style.top = teleport_1.style.top = MAZE_START_HEIGHT + i * SCALE + "px";
+                        teleport_2.style.height = teleport_1.style.height = SCALE + "px";
+                        teleport_2.style.width = teleport_1.style.width = SCALE + "px";
+                        BOX.appendChild(teleport_1);
+                        BOX.appendChild(teleport_2);
                     }
                     break;
                 case 5:
-                    coins += 1;
+                    TO_COLLECT += 1;
                     coin = createEl("div", "circle coin");
-                    coin.style.height = 0.25 * scale + "px";
-                    coin.style.width = 0.25 * scale + "px";
+                    coin.style.height = 0.25 * SCALE + "px";
+                    coin.style.width = 0.25 * SCALE + "px";
                     td = createEl("td");
                     td.appendChild(coin);
                     row.appendChild(td);
                     break;
                 case 7:
-                    coins += 1;
+                    TO_COLLECT += 1;
                     coin = createEl("div", "circle power-up");
-                    coin.style.height = 0.6 * scale + "px";
-                    coin.style.width = 0.6 * scale + "px";
+                    coin.style.height = 0.6 * SCALE + "px";
+                    coin.style.width = 0.6 * SCALE + "px";
                     td = createEl("td");
                     td.appendChild(coin);
                     row.appendChild(td);
@@ -538,34 +539,38 @@ function loadMap() {
             }
         }
     }
-    sign = createEl("div", "button");
-    sign.id = "score";
-    sign.innerHTML = "<p>Score</p><p>" + score.toString() + "</p>";
-    sign.style.left =  mazeStart + (mazeWidth + 2) * scale - 5 + "px", 
-    sign.style.top = mazeStart + 3 * scale + "px";
-    sign.style.position = "absolute";
-    box.appendChild(sign);
-    sign = createEl("div", "button");
+    infoBox = createEl("div");
+    infoBox.id = "info_box";
+    infoBox.style.position = "absolute";
+    infoBox.style.top = MAZE_START_HEIGHT - 3.5 * SCALE + "px";
+    infoBox.style.width = GAME_WIDTH + "px";
+    sign = createEl("p", "info");
     sign.id = "lives";
-    sign.innerHTML = "<p>Lives</p><p>" + lives.toString() + "</p>";
-    sign.style.left =  mazeStart + (mazeWidth + 2) * scale + "px", 
-    sign.style.top = mazeStart + 8 * scale + "px";
     sign.style.position = "absolute";
-    box.appendChild(sign);
-    box.appendChild(table);
-    box.appendChild(pacman.img);
+    sign.style.left = MAZE_START_WIDTH + SCALE +  "px";
+    sign.innerHTML = "Lives: " + LIVES.toString();
+    infoBox.appendChild(sign);
+    sign = createEl("p", "info");
+    sign.id = "score";
+    sign.style.position = "absolute";
+    sign.style.left = MAZE_START_WIDTH + 6.5 * SCALE + "px";
+    sign.innerHTML = "Score: " + SCORE.toString();
+    infoBox.appendChild(sign);
+    BOX.appendChild(infoBox);
+    BOX.appendChild(table);
+    BOX.appendChild(PACMAN.img);
     changeLives();
     changeScore();
-    firstGame = false;
-    continueGame = true;
+    FIRST_GAME = false;
+    CONTINUE_GAME = true;
     readyGo();
 }
 
-function noCollision(map, pacman, direction) {
+function noCollision(direction) {
     var changedX, changedY, first, second, values;
-    changedY = pacman.y + pacman.speed * Math.pow((-1), (direction < 2)) * (direction % 2);
-    changedX = pacman.x + pacman.speed * Math.pow((-1), (direction < 2)) * !(direction % 2);
-    if (changedX < mazeStart || changedX >= mazeStart + scale * (mazeWidth - 1)) {
+    changedY = PACMAN.y + PACMAN.speed * Math.pow((-1), (direction < 2)) * (direction % 2);
+    changedX = PACMAN.x + PACMAN.speed * Math.pow((-1), (direction < 2)) * !(direction % 2);
+    if (changedX < MAZE_START_WIDTH || changedX >= MAZE_START_WIDTH + SCALE * (MAZE_WIDTH - 1)) {
         if (!(direction % 2)){
             return 1;
         }
@@ -574,17 +579,17 @@ function noCollision(map, pacman, direction) {
         }
     }
     values = [];
-    values[0] = Math.floor((changedX - mazeStart) / scale);
-    values[1] = Math.floor((changedY - mazeStart) / scale);
-    values[2] = Math.ceil((changedX - mazeStart) / scale);
-    values[3] = Math.ceil((changedY - mazeStart) / scale);
+    values[0] = Math.floor((changedX - MAZE_START_WIDTH) / SCALE);
+    values[1] = Math.floor((changedY - MAZE_START_HEIGHT) / SCALE);
+    values[2] = Math.ceil((changedX - MAZE_START_WIDTH) / SCALE);
+    values[3] = Math.ceil((changedY - MAZE_START_HEIGHT) / SCALE);
     if (direction % 2) {
-        first = map[values[direction]][values[0]];
-        second = map[values[direction]][values[2]];
+        first = MAP[values[direction]][values[0]];
+        second = MAP[values[direction]][values[2]];
     }
     else {
-        first = map[values[1]][values[direction]];
-        second = map[values[3]][values[direction]];
+        first = MAP[values[1]][values[direction]];
+        second = MAP[values[3]][values[direction]];
     }
     if (first == 1 || first == 4 || second == 1 || second == 4) {
         return 0;
@@ -596,11 +601,11 @@ function noCollision(map, pacman, direction) {
 
 
 function teleports(character) {
-    if (character.x == mazeStart - scale) {
-        character.x = mazeStart + scale * mazeWidth - character.speed;
+    if (character.x == MAZE_START_WIDTH - SCALE) {
+        character.x = MAZE_START_WIDTH + SCALE * MAZE_WIDTH - character.speed;
     }
-    else if (character.x == mazeStart + scale * mazeWidth) {
-        character.x = mazeStart - scale + character.speed;
+    else if (character.x == MAZE_START_WIDTH + SCALE * MAZE_WIDTH) {
+        character.x = MAZE_START_WIDTH - SCALE + character.speed;
     }
 }
 
@@ -616,178 +621,180 @@ function falseAllExcept (array, exception) {
 function handleKeys(event) {
     var keyNumber = event.keyCode;
     if (37 <= keyNumber && keyNumber <= 40) {
-        falseAllExcept(key, keyNumber - 37);
+        falseAllExcept(KEYS, keyNumber - 37);
         event.preventDefault();
     }
 }
 
 function react() {
-    if (play) {
-        var i, j, table, square, point, x, y;
-        for (i = 0; i < made; i++) {
-            if (new Date().getTime() - ghosts[i].modeStart >= modes[ghosts[i].mode] * 1000) {
-                if (ghosts[i].mode == 2 && !(ghosts[i].hit)) {
-                    if (!((ghosts[i].x * 20 / scale) % 2) && !((ghosts[i].y * 20 / scale) % 2)) {
-                        ghosts[i].modeStart = (new Date().getTime()) - powerUpTimes[i];
-                        ghosts[i].mode = powerUpModes[i];
-                        ghosts[i].speed = 0.1 * scale;
-                        ghosts[i].img.src = STATIC_PATH_IMG + "pacman/" + ghostImages[i];
+    if (PLAY) {
+        var i, j, table, square, point, x, y, infoBox;
+        for (i = 0; i < MADE; i++) {
+            if (new Date().getTime() - GHOSTS[i].modeStart >= MODES_TIMES[GHOSTS[i].mode] * 1000) {
+                if (GHOSTS[i].mode == 2 && !(GHOSTS[i].hit)) {
+                    if (!((GHOSTS[i].x * 20 / SCALE) % 2) && !((GHOSTS[i].y * 20 / SCALE) % 2)) {
+                        GHOSTS[i].modeStart = (new Date().getTime()) - POWER_UP_TIMES[i];
+                        GHOSTS[i].mode = POWER_UP_MODES[i];
+                        GHOSTS[i].speed = 0.1 * SCALE;
+                        GHOSTS[i].img.src = STATIC_PATH_IMG + "pacman/" + GHOST_IMAGES[i];
                     }
                 }
-                else if (i < moving && ghosts[i].mode != 2) {
-                    ghosts[i].modeStart = new Date().getTime();
-                    ghosts[i].mode = (ghosts[i].mode + 1) % 2;
+                else if (i < MOVING && GHOSTS[i].mode != 2) {
+                    GHOSTS[i].modeStart = new Date().getTime();
+                    GHOSTS[i].mode = (GHOSTS[i].mode + 1) % 2;
                 }
             }
         }
 
         for (i = 0; i < 4; i++) {
-            if (key[i] && noCollision(map, pacman, i)) {
-                falseAllExcept(direction, i);
+            if (KEYS[i] && noCollision(i)) {
+                falseAllExcept(DIRECTIONS, i);
             }
         }
         
-        if (!(parseInt(pacman.y - mazeStart) % scale) && !(parseInt(pacman.x - mazeStart) % scale)) {
-            y = (pacman.y - mazeStart) / scale;
-            x = (pacman.x - mazeStart) / scale;
-            point = map[y][x]
+        if (!(parseInt(PACMAN.y - MAZE_START_HEIGHT) % SCALE) && !(parseInt(PACMAN.x - MAZE_START_WIDTH) % SCALE)) {
+            y = (PACMAN.y - MAZE_START_HEIGHT) / SCALE;
+            x = (PACMAN.x - MAZE_START_WIDTH) / SCALE;
+            point = MAP[y][x]
             if (point == 5) {
-                map[y][x] = 0;
-                score += 10;
+                MAP[y][x] = 0;
+                SCORE += 10;
                 changeScore();
-                coins -= 1;
+                TO_COLLECT -= 1;
                 table = document.getElementById("game");
                 square = table.children[y].children[x];
                 square.removeChild(square.firstChild);
             }
             else if (point == 7) {
-                map[y][x] = 0;
-                powerUpTime = new Date().getTime();
-                score += 50;
+                MAP[y][x] = 0;
+                SCORE += 50;
                 changeScore();
-                coins -= 1;
+                TO_COLLECT -= 1;
                 table = document.getElementById("game");
                 square = table.children[y].children[x];
                 square.removeChild(square.firstChild);
-                killed = 0;
-                for (i = 0; i < made; i++) {
-                    if (!(ghosts[i].hit)) {
-                        powerUpModes[i] = ghosts[i].mode % 2;
-                        ghosts[i].mode = 2;
-                        powerUpTimes[i] = (new Date().getTime()) - ghosts[i].modeStart;
-                        ghosts[i].modeStart = new Date().getTime();
-                        ghosts[i].moves[0] *= (-1);
-                        ghosts[i].moves[1] *= (-1);
-                        ghosts[i].speed = 0.05 * scale;
-                        ghosts[i].img.src = STATIC_PATH_IMG + "pacman/" + ghostImages[4];
+                KILLED = 0;
+                for (i = 0; i < MADE; i++) {
+                    if (!(GHOSTS[i].hit)) {
+                        POWER_UP_MODES[i] = GHOSTS[i].mode % 2;
+                        GHOSTS[i].mode = 2;
+                        POWER_UP_TIMES[i] = (new Date().getTime()) - GHOSTS[i].modeStart;
+                        GHOSTS[i].modeStart = new Date().getTime();
+                        GHOSTS[i].moves[0] *= (-1);
+                        GHOSTS[i].moves[1] *= (-1);
+                        GHOSTS[i].speed = 0.05 * SCALE;
+                        GHOSTS[i].img.src = STATIC_PATH_IMG + "pacman/" + GHOST_IMAGES[4];
                     }
                 }
-                if (powerUp) {
-                    sign = document.getElementById("powerUp");
-                    box.removeChild(sign);
-                    clearTimeout(timer2);
+                sign = document.getElementById("powerUp");
+                if (sign) {                    
+                    BOX.removeChild(sign);
+                    clearTimeout(TIMER_2);
                 }
-                powerUp = 8;
+                POWER_UP = 8;
                 changePowerUp();
             }
         }
-        if (!coins) {
-            continueGame = true;
+        if (!TO_COLLECT) {
+            SCORE += 2000;
+            changeScore();
+            CONTINUE_GAME = true;
+            clearTimeout(TIMER_2);
             loadMap();
         }
         
-        for (i = 0; i < made; i++) {
-            if (ghostCollision(ghosts[i], pacman)) {
-                if (ghosts[i].mode == 2) {
-                    if (!(ghosts[i].hit)) {
-                        score += 200 * Math.pow(2, killed);
+        for (i = 0; i < MADE; i++) {
+            if (ghostCollision(GHOSTS[i])) {
+                if (GHOSTS[i].mode == 2) {
+                    if (!(GHOSTS[i].hit)) {
+                        SCORE += 200 * Math.pow(2, KILLED);
                         changeScore();
-                        killed += 1;
-                        ghosts[i].hit = 1;
+                        KILLED += 1;
+                        GHOSTS[i].hit = 1;
                     }
                 }
                 else {
-                    lives -= 1;
+                    LIVES -= 1;
                     changeLives();
-                    pacman.x = pacman.startX;
-                    pacman.y = pacman.startY;
-                    pacman.img.style.left = pacman.x + "px";
-                    pacman.img.style.top = pacman.y + "px";
-                    pacman.mode = 0;
-                    $("#image").rotate(pacman.mode * 90);
-                    moving = 0;
-                    if (powerUp) {
-                        powerUp = 0;
-                        sign = document.getElementById("powerUp");
-                        if (sign) box.removeChild(sign);
-                        clearTimeout(timer2);
+                    PACMAN.x = PACMAN.startX;
+                    PACMAN.y = PACMAN.startY;
+                    PACMAN.img.style.left = PACMAN.x + "px";
+                    PACMAN.img.style.top = PACMAN.y + "px";
+                    PACMAN.mode = 0;
+                    $("#image").rotate(PACMAN.mode * 90);
+                    MOVING = 0;
+                    clearTimeout(TIMER_2);
+                    sign = document.getElementById("powerUp");
+                    infoBox = document.getElementById("info_box");
+                    if (sign) {
+                        POWER_UP = 0;
+                        infoBox.removeChild(sign);
                     }
-                    for (j = 0; j < made; j++) {
-                        ghosts[j].x = ghosts[j].startX;
-                        ghosts[j].y = ghosts[j].startY;
-                        ghosts[j].img.style.left = ghosts[j].x + "px";
-                        ghosts[j].img.style.top = ghosts[j].y + "px";
-                        ghosts[j].img.src = STATIC_PATH_IMG + "pacman/" + ghostImages[j];
-                        ghosts[j].mode = 1;
+                    for (j = 0; j < MADE; j++) {
+                        GHOSTS[j].x = GHOSTS[j].startX;
+                        GHOSTS[j].y = GHOSTS[j].startY;
+                        GHOSTS[j].img.style.left = GHOSTS[j].x + "px";
+                        GHOSTS[j].img.style.top = GHOSTS[j].y + "px";
+                        GHOSTS[j].img.src = STATIC_PATH_IMG + "pacman/" + GHOST_IMAGES[j];
+                        GHOSTS[j].mode = 1;
                     }
-                    if (lives) {
-                        ready = 4;
-                        play = false;
+                    PLAY = false;
+                    if (LIVES) {
+                        READY = 4;
+                        clearTimeout(TIMER_1);
                         readyGo();
-                        clearTimeout(timer);
-                        falseAllExcept(direction, -1);
-                        falseAllExcept(key, -1);
+                        falseAllExcept(DIRECTIONS, -1);
+                        falseAllExcept(KEYS, -1);
                     }
                     else {
-                        play = false;
                         loadMenu();
-                        state = sendScore(score);
-                        box.innerHTML += '<p id="score_after">Your score: ' + score.toString() + '</p>';
+                        state = sendScore(SCORE);
+                        BOX.innerHTML += '<p id="score_after">Your score: ' + SCORE.toString() + '</p>';
                         return;
                     }
                 }
             }
         }
         
-        for (i = 0; i < made; i++) {
-            if (ghosts[i].hit && ghosts[i].x == ghosts[i].startX && ghosts[i].y == ghosts[i].startY) {
-                ghosts[i].hit = 0;
-                ghosts[i].modeStart = (new Date().getTime()) - powerUpTimes[i];
-                ghosts[i].mode = powerUpModes[i];
-                ghosts[i].speed = 0.1 * scale;
-                ghosts[i].img.src = STATIC_PATH_IMG + "pacman/" + ghostImages[i];
+        for (i = 0; i < MADE; i++) {
+            if (GHOSTS[i].hit && GHOSTS[i].x == GHOSTS[i].startX && GHOSTS[i].y == GHOSTS[i].startY) {
+                GHOSTS[i].hit = 0;
+                GHOSTS[i].modeStart = (new Date().getTime()) - POWER_UP_TIMES[i];
+                GHOSTS[i].mode = POWER_UP_MODES[i];
+                GHOSTS[i].speed = 0.1 * SCALE;
+                GHOSTS[i].img.src = STATIC_PATH_IMG + "pacman/" + GHOST_IMAGES[i];
             }
         }
         
-        teleports(pacman);
-        for (i = 0; i < moving; i++) {
-            teleports(ghosts[i]);
+        teleports(PACMAN);
+        for (i = 0; i < MOVING; i++) {
+            teleports(GHOSTS[i]);
         }
         
         for (i = 0; i < 4; i++) {
-            if (direction[i] && noCollision(map, pacman, i)) {
-                pacman.mode = (i + 2) % 4 //0, 1, 2, 3 ->> 2, 3, 0, 1
-                $("#image").rotate(pacman.mode * 90);
-                pacman.x += pacman.speed * Math.pow((-1), (i < 2)) * !(i % 2);
-                pacman.y += pacman.speed * Math.pow((-1), (i < 2)) * (i % 2);
-                pacman.img.style.left = pacman.x + "px";
-                pacman.img.style.top = pacman.y + "px";
+            if (DIRECTIONS[i] && noCollision(i)) {
+                PACMAN.mode = (i + 2) % 4 //0, 1, 2, 3 ->> 2, 3, 0, 1
+                $("#image").rotate(PACMAN.mode * 90);
+                PACMAN.x += PACMAN.speed * Math.pow((-1), (i < 2)) * !(i % 2);
+                PACMAN.y += PACMAN.speed * Math.pow((-1), (i < 2)) * (i % 2);
+                PACMAN.img.style.left = PACMAN.x + "px";
+                PACMAN.img.style.top = PACMAN.y + "px";
             }
             else {
-               direction[i] = false;
+               DIRECTIONS[i] = false;
             }
         }
-        for (i = 0; i < moving; i++) {
-            if (!((ghosts[i].y - mazeStart) % scale) && !((ghosts[i].x - mazeStart) % scale)) {
-                if (ghosts[i].hit) {
-                    ghosts[i].speed = 0.25 * scale;
+        for (i = 0; i < MOVING; i++) {
+            if (!((GHOSTS[i].y - MAZE_START_HEIGHT) % SCALE) && !((GHOSTS[i].x - MAZE_START_WIDTH) % SCALE)) {
+                if (GHOSTS[i].hit) {
+                    GHOSTS[i].speed = 0.25 * SCALE;
                 }
-                makeMove(map, ghosts, pacman, i, mazeStart);
+                makeMove(i);
             }
-            ghosts[i].y += ghosts[i].speed * ghosts[i].moves[0];
-            ghosts[i].x += ghosts[i].speed * ghosts[i].moves[1];
-            ghosts[i].img.style.left = ghosts[i].x + "px";
-            ghosts[i].img.style.top = ghosts[i].y + "px";
+            GHOSTS[i].y += GHOSTS[i].speed * GHOSTS[i].moves[0];
+            GHOSTS[i].x += GHOSTS[i].speed * GHOSTS[i].moves[1];
+            GHOSTS[i].img.style.left = GHOSTS[i].x + "px";
+            GHOSTS[i].img.style.top = GHOSTS[i].y + "px";
         }
     }
 }
