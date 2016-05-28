@@ -1,18 +1,20 @@
 {% extends 'guinea_pig/base.html' %}
 {% load staticfiles %}
+{% load under_to_space %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/'%}{{ game.name }}.css" type="text/css">
+{% endblock css %}
 {% block js_scripts %}
     <script>var STATIC_PATH_IMG = "{% static 'games/images/' %}";</script>
-    <script src="{% static 'games/' %}{{ game.source }}"></script>
     <script src="{% static 'js/get_highscores.js' %}"></script>
     <script src="{% static 'js/send_score.js' %}"></script>
+    <script src="{% static 'games/' %}{{ game.source }}"></script>
 {% endblock js_scripts %}
 {% block content %}
-    <h2>Game</h2>
+    <h2 class="game_name">{{ game.name|under_to_space }}</h2>
     <ul>
-        <li><h3>{{ game.name }}</h3></li>
         <li>{{ game.author }}</li>
         <li>{{ game.description }}</li>
-        <li>{{ game.source }}</li>
     </ul>
     <div id="game_container">
     </div>
@@ -31,10 +33,11 @@
         {% for comment in comments %}
             <div class="comment">
                 <img src="{% static 'images/avatars/' %}{{ comment.author.avatar }}" class="small_img"/>
-                <p>{{ comment.text }}</p>
-                <p>{{ comment.author }}</p>
-                <p>{{ comment.pub_date }}</p>
-                <p>{{ comment.game }}</p>
+                <div class="comment_text">
+                    <span>{{ comment.author }}</span>
+                    <span>{{ comment.pub_date|date:"d-m-Y G:i" }}</span>
+                    <p>{{ comment.text }}</p>
+                </div>
             </div>
         {% endfor %}
     </div>

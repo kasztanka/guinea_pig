@@ -7,6 +7,6 @@
     <form method="POST" id="login_form">
         {% csrf_token %}
         {{ form.as_p}}
-        <button type="submit">Sign in</button>
+        <button type="submit" class="press_button green">Sign in</button>
     </form>
 {% endblock content %}

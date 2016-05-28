@@ -1,5 +1,6 @@
 {% extends 'guinea_pig/base.html' %}
 {% load staticfiles %}
+{% load under_to_space %}
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}" type="text/css">
 {% endblock css %}
@@ -18,7 +19,7 @@
 <div id="games">
     <h2>Games</h2>
     {% for game in games %}
-        <a href="{% url 'guinea_pig:game' game.name %}"><h3>{{ game.name }}</h3></a>
+        <a href="{% url 'guinea_pig:game' game.name %}"><h3 class="game_name">{{ game.name|under_to_space }}</h3></a>
     {% endfor %}
 </div>
 <div id="contact">
