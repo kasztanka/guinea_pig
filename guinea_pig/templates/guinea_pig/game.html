@@ -2,13 +2,13 @@
 {% load staticfiles %}
 {% load under_to_space %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/'%}{{ game.name }}.css" type="text/css">
+    <link rel="stylesheet" href="{% static 'games/'%}{{ game.name }}/style_{{ game.name }}.css" type="text/css">
 {% endblock css %}
 {% block js_scripts %}
     <script>var STATIC_PATH_IMG = "{% static 'games/' %}";</script>
     <script src="{% static 'js/get_highscores.js' %}"></script>
     <script src="{% static 'js/send_score.js' %}"></script>
-    <script src="{% static 'games/' %}{{ game.source }}"></script>
+    <script src="{% static 'games/' %}{{ game.name }}/{{ game.source }}"></script>
 {% endblock js_scripts %}
 {% block content %}
     <h2 class="game_name">{{ game.name|under_to_space }}</h2>

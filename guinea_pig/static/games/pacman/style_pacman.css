@@ -1,0 +1,119 @@
+@font-face {
+    font-family: GROBOLD;
+    src: url(GROBOLD.ttf);
+    
+}
+
+#game_container {
+	background: #070D40;
+	position: relative;
+    border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border: 2px solid rgba(0,0,0,0.3);
+	border-bottom-width: 3px;
+    width: 700px;
+    height: 640px;
+    font-family: GROBOLD, cursive;
+    text-align: center;
+}
+
+#game {
+	background: #070D40;
+	table-layout: fixed;
+	border-spacing:0;
+	position: absolute;
+}
+
+.wall {
+    background: #6775EA;
+}
+
+.block {
+    background: #FFEDE5;
+}
+
+.teleport {
+    background: #070D40;
+    z-index: 100;
+    position: absolute;
+}
+
+
+#title {
+	font-size: 64px;
+    margin-bottom: 20px;
+}
+
+img.center {
+    display: block;
+    margin: 0 auto;
+}
+
+h3 {
+    font-size: 75px;
+    text-transform: uppercase;
+    color:white;
+    margin: 40px;
+}
+
+.yellow {
+    color: #EBF40E;
+}
+
+div.button{
+    text-align: center;
+	display: inline-block;
+	color: #666;
+	background-color: #eee;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: 12px;
+	padding: 10px 30px;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border: 1px solid rgba(0,0,0,0.3);
+	border-bottom-width: 3px;
+}
+
+#playButton {
+    text-transform: uppercase;
+    color:white;
+    font-size: 35px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+#playButton:hover {
+    opacity: 1;
+}
+
+
+#score, #ready, #lives, #powerUp {
+    border-bottom-width: 1px;
+    font-size: 14px;
+}
+
+#score_after {
+    color: white;
+    text-transform: uppercase;
+    font-size: 35px;
+    margin: 40px;
+}
+
+.circle {
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  border-radius: 25px;
+  margin: auto;
+}
+
+.coin {
+   background: yellow;
+}
+
+.power-up {
+   background: #CD1068;
+   border: 1px solid #FF85C8;
+}

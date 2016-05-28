@@ -1,0 +1,15 @@
+.avatar {
+    border: 3px solid transparent;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.avatar:hover {
+    opacity: 1;
+}
+
+.active {
+    border: solid 3px black;
+    opacity: 1;
+}
+

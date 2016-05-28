@@ -1,0 +1,191 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: LooseySans;
+    src: url("LooseySans.otf") format("opentype");
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:focus {
+    outline: none;
+}
+
+h2 {
+    font-size: 40px;
+    font-family: 'Merriweather Sans', sans-serif;
+    margin-bottom: 15px;
+}
+
+h1, h3, h4, h5, h6 {
+    font-weight: normal;
+}
+
+body {
+    background: #e7e3df;
+    font-family: 'Merriweather Sans', sans-serif;
+    color: black;
+    font-weight: normal;
+}
+
+#back {
+    background-image: url('../images/bg_morses_blurred.jpg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 100%;
+    height: 0;
+    padding-top: 71.44%;
+    position: absolute;
+    top: 0;
+    z-index: -3;
+}
+
+#logo {
+    float: left;
+    font-family: LooseySans;
+    font-size: 120px;
+    color: black;
+    margin: 40px 0 0 40px;
+}
+
+@media screen and (max-width: 1600px) {
+    #logo {
+        font-size: 90px;
+    }
+}
+
+#menu {
+    font-family: LooseySans;
+    clear: both;
+    overflow: hidden;
+}
+
+#menu ul {
+    float: left;
+    list-style-type: none;
+}
+
+#menu li {
+    float: left;
+    font-size: 40px;
+    padding-top: 15px;
+    padding-bottom: 35px;
+    text-align: center;
+    margin-left: 40px;
+    transition: transform 0.3s;
+}
+
+#menu li:hover {
+    transform: scale(1.1, 1.1);
+}
+
+#user_account {
+    float: right;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+.small_img {
+    height: 50px;
+    width: auto;
+}
+
+.press_button {
+    color: #fff;
+    display: inline-block;
+    font-size: 14px;
+    font-family: 'Merriweather Sans';
+    padding: 3px 5px;
+    margin: 2px;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    border: none;
+    border-radius: 3px;
+    box-shadow: 0 2px #999;
+}
+
+.press_button:hover {
+    box-shadow: none;
+    transform: translateY(2px);
+}
+
+.green {
+    background-color: #31a707;
+}
+
+.green:hover {
+    background-color: #3bc10c;
+}
+
+.blue {
+    background-color: #144bff;
+}
+
+.blue:hover {
+    background-color: #426eff;
+}
+
+#main_container {
+    clear: both;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 600px;
+    max-width: 1200px;
+    min-height: 400px;
+    background-color: rgba(239, 239, 239, 0.6);
+    padding: 40px;
+}
+
+
+#profile_header, #profile_header h2, #profile_header img {
+    float: left;
+    margin-right: 30px;
+}
+
+#profile_header h2 {
+    line-height: 100px;
+    height: 100px;
+}
+
+#profile_info {
+    clear: both;
+    padding-top: 20px;
+}
+
+.game_name {
+    text-transform: capitalize;
+}
+
+.comment {
+    clear: both;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.comment img {
+    float: left;
+}
+
+.comment_text {
+    margin-left: 10px;
+    float: left;
+    width: 400px;
+}
+
+.comment_text :first-child {
+    font-weight: bold;
+}
+
+footer {
+    text-align:center;
+    margin: 10px;
+}
