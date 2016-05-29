@@ -33,9 +33,13 @@
         {% endif %}
         {% for comment in comments %}
             <div class="comment">
-                <img src="{% static 'images/avatars/' %}{{ comment.author.avatar }}" class="small_img"/>
+                <a href="{% url 'guinea_pig:profile' comment.author %}">
+                    <img src="{% static 'images/avatars/' %}{{ comment.author.avatar }}" class="small_img"/>
+                </a>
                 <div class="comment_text">
-                    <span>{{ comment.author }}</span>
+                    <a href="{% url 'guinea_pig:profile' comment.author %}">
+                        <span>{{ comment.author }}</span>
+                    </a>
                     <span>{{ comment.pub_date|date:"d-m-Y G:i" }}</span>
                     <p>{{ comment.text }}</p>
                 </div>

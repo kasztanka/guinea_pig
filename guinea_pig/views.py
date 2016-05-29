@@ -3,8 +3,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 from django.template import loader
 
 from .forms import RegisterUserForm, LoginUserForm, CommentForm
@@ -98,7 +99,9 @@ def get_highscores(request, game_name):
     for i, record in enumerate(highscores):
         number = '<p>' + str(i + 1) + '. '
         score = '<span>' + str(record.score) + '</span> '
-        result += number + score + str(record.player) + '</p>'
+        url_to_profile = reverse('guinea_pig:profile', args=[str(record.player)])
+        gamer = '<a href="' + url_to_profile + '">' + str(record.player) + '</a>' + '</p>'
+        result += number + score + gamer
     return HttpResponse(result)
 
 def send_score(request, game_name):
