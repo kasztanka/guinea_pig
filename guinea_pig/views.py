@@ -33,7 +33,8 @@ def index(request):
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     profile = get_object_or_404(UserProfile, user=user)
-    return render(request, 'guinea_pig/profile.html', {'profile': profile})
+    records = Record.objects.filter(player=profile).order_by('game__name')
+    return render(request, 'guinea_pig/profile.html', {'profile': profile, 'records': records})
 
 def user_register(request):
     if request.method == "POST":
