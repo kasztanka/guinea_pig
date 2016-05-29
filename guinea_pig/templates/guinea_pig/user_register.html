@@ -16,20 +16,21 @@
         {% for av in avatars|shuffle %}
              <img src="{% static 'images/avatars/' %}{{ av.name }}" name="{{ av.name }}" class="avatar"/>
         {% endfor %}
-        <input type="hidden" name="avatar" value="{{ img_names|first }}" id="id_avatar">
+        <input type="hidden" name="avatar" id="id_avatar">
         <br />
         <button type="submit" class="blue press_button">Sign up</button>
     </form>
     <script>
         var imgs = document.getElementsByClassName("avatar");
         imgs[0].className += " active";
-
+        input = document.getElementById("id_avatar");
+        input.value = imgs[0].getAttribute("name");
+        
         for (var i = 0; i < imgs.length; i++) {
             imgs[i].onclick = function(){
                 old = document.getElementsByClassName("active")[0];
                 old.className = "avatar";
                 this.className += " active";
-                input = document.getElementById("id_avatar");
                 input.value = this.getAttribute("name");
             };
         }

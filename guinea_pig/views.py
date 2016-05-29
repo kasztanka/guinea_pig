@@ -53,8 +53,9 @@ def user_register(request):
             return redirect('guinea_pig:profile', username=user.username)
     else:
         avatars = Avatar.objects.all()
+        img_names = list(map(lambda avatar: avatar.name, avatars))
         user_form = RegisterUserForm()
-        context = {'user_form': user_form, 'avatars': avatars}
+        context = {'user_form': user_form, 'avatars': avatars, 'img_names': img_names}
         return render(request, 'guinea_pig/user_register.html', context)
 
 def user_login(request):
