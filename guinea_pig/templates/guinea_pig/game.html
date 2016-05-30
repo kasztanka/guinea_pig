@@ -6,6 +6,11 @@
 {% endblock css %}
 {% block js_scripts %}
     <script>var STATIC_PATH_IMG = "{% static 'games/' %}";</script>
+    {% if user.is_authenticated %}
+        <script>var LOGGED_IN = true;</script>
+    {% else %}
+        <script>var LOGGED_IN = false;</script>
+    {% endif %}
     <script src="{% static 'js/get_highscores.js' %}"></script>
     <script src="{% static 'js/send_score.js' %}"></script>
     <script src="{% static 'games/' %}{{ game.name }}/{{ game.source }}"></script>
