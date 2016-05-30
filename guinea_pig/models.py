@@ -43,4 +43,4 @@ class Comment(models.Model):
     text = models.CharField(max_length=600)
     pub_date = models.DateTimeField('publication date', default=timezone.now)
     def __str__(self):
-        return self.game.name + "_" + self.author.user.username + "_" + self.pub_date
+        return self.game.name + "_" + self.author.user.username + "_" + str(self.pub_date)
