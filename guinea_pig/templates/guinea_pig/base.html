@@ -21,14 +21,17 @@
                 {% if user.is_authenticated %}
                     <div id="user_account">
                         <p>Hello {{ user.username }}!</p>
-                        <a href="{% url 'guinea_pig:user_logout' %}">
+                        <a href="{% url 'guinea_pig:profile' user.username%}">
+                            <button type="button" class="press_button blue">Your profile</button>
+                        </a>
+                        <a href="{% url 'guinea_pig:user_logout' %}?nextpage={{ request.path }}">
                             <button type="button" class="press_button blue">Log out</button>
                         </a>
                     </div>
                 {% else %}
                     {% if not 'new' in request.path and not 'login' in request.path %}
                         <div id="user_account">
-                            <form action="{% url 'guinea_pig:user_login' %}" method="POST">
+                            <form action="{% url 'guinea_pig:user_login' %}?nextpage={{ request.path }}" method="POST">
                                 {% csrf_token %}
                                 <p><label for="id_username">Username:</label>
                                 <input id="id_username" maxlength="30" name="username" type="text" /></p>

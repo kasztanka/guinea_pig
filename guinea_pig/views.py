@@ -66,7 +66,7 @@ def user_login(request):
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
-            return redirect('guinea_pig:index')
+            return redirect(request.GET["nextpage"])
         else:
             form = LoginUserForm(request.POST)
             return render(request, 'guinea_pig/login.html',
@@ -78,7 +78,7 @@ def user_login(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return redirect('guinea_pig:index')
+    return redirect(request.GET["nextpage"])
 
 def game(request, game_name):
     game_obj = get_object_or_404(Game, name=game_name)
