@@ -1,14 +1,15 @@
 $(gra);
 function gra () {
 
-var LAYERS_QUANTITY = 8;
+var LAYERS_QUANTITY = 6;
 var COLUMNS_NUM = 6;
 var BACKGROUND_IMG = "background.png";
+var MIN_DIST_COLS = 230;
 
 var COLUMN = {
     width: 84,
     height: 404,
-    speed: 2,
+    init_speed: 2.4,
     img: "column.png"
 };
 
@@ -18,10 +19,10 @@ var GAME = {
 };
 
 var HERO = {
-    width: 110,
-    height: 120,
-    jump: 10,
-    gravity: 0.5,
+    width: 90,
+    height: 100,
+    jump: 12,
+    gravity: 0.7,
     img: "hero.png",
     img_dead: "hero_dead.png"
 };
@@ -37,6 +38,9 @@ var gameArea = {
         this.context = this.canvas.getContext("2d");
         gameDiv.removeChild(gameDiv.firstChild);
         gameDiv.appendChild(this.canvas);
+        
+        gameArea.background = new sprite(GAME.width, GAME.height,
+            BACKGROUND_IMG, 0, 0);
         
         this.wait_for_start = 1;
         this.paused = 1;
@@ -82,15 +86,13 @@ function startGame() {
         0, 0);
     gameArea.dead_player.speed = 0;
 
+    COLUMN.speed = COLUMN.init_speed;
     gameArea.columns_up = new Array();
     gameArea.columns_down = new Array();
     
     for (var i = 0; i < COLUMNS_NUM; i++) {
         create_two_columns(gameArea.columns_up, gameArea.columns_down, i);
     }
-    
-    gameArea.background = new sprite(
-        GAME.width, GAME.height, BACKGROUND_IMG, 0, 0);
     
     drawBackground(gameArea.background);
     drawColumns(gameArea.columns_up, gameArea.columns_down);
@@ -114,9 +116,9 @@ function create_two_columns(columns_up, columns_down, num) {
     var gap;
     
     if (num == 0) x = GAME.width;
-    else x = columns_up[num - 1].x + 200 + Math.random() * 100;
+    else x = columns_up[num - 1].x + MIN_DIST_COLS + Math.random() * 100;
     y_center = GAME.height / 2 - 100 + Math.random() * 200;
-    gap = 2 * HERO.height + Math.random() * 100;
+    gap = 2.5 * HERO.width + Math.random() * 50;
     
     new_up_column = new sprite(
         COLUMN.width, COLUMN.height, img_up,
@@ -154,10 +156,10 @@ function update_two_columns(columns_up, columns_down, num) {
         
         columns_up[num].not_visited = 1;
         prev_num = (num + COLUMNS_NUM- 1) % COLUMNS_NUM;
-        new_x = columns_up[prev_num].x + 150 + Math.random() * 100;
+        new_x = columns_up[prev_num].x + MIN_DIST_COLS + Math.random() * 100;
         
         y_center = GAME.height / 2 - 100 + Math.random() * 200;
-        gap = 2 * HERO.height + Math.random() * 100;
+        gap = 2.5 * HERO.width + Math.random() * 50;
         
         columns_up[num].x = new_x;
         columns_up[num].y = y_center - gap / 2 - COLUMN.height;
@@ -257,6 +259,7 @@ function endGameAnimation(player) {
 function updateGameArea() {
     if (gameArea.menu) {
         gameArea.menu = 0;
+
         drawBackground(gameArea.background);
         gameArea.context.font = "45px LooseySans";
         gameArea.context.fillText("Jumping Adventure!", 20, 100);
@@ -277,6 +280,7 @@ function gameFrame() {
     for (var i = 0; i < COLUMNS_NUM; i++) {
             update_two_columns(gameArea.columns_up, gameArea.columns_down, i);
         }
+    COLUMN.speed += 0.0004;
     updateHero(gameArea.myHero);
     
     drawBackground(gameArea.background);
