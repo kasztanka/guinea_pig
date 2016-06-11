@@ -29,6 +29,7 @@ var HERO = {
 
 
 var gameDiv = document.getElementById("game_container");
+gameDiv.style.backgroundImage = "url('" + STATIC_PATH_IMG + 'jumping_adventure/images/' + BACKGROUND_IMG + "')";
 
 var gameArea = {
     canvas: document.createElement("canvas"),
